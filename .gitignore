@@ -21,7 +21,7 @@ db.sqlite3
 staticfiles/
 
 # Media files
-media/
+# media/
 
 # IDE
 .vscode/
