@@ -1,0 +1,1766 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechNest - Premium Electronics & Next-Gen Gadgets</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- TechNest Stylesheet -->
+  <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+</head>
+
+<body>
+
+  <!-- =========================================================================
+       1. Top Announcement Bar
+       ========================================================================= -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar-left">
+        <span class="top-badge">NEW</span>
+        <span>Spring Tech Fest is live! Get up to 45% off selected electronics.</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="#support">24/7 Support</a>
+        <a href="#faq">Help & FAQ</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       2. Main Navigation Bar
+       ========================================================================= -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <!-- Brand Logo -->
+        <a href="#" class="brand-logo" aria-label="TechNest Home">
+          <img src="{% static 'shop/images/technest-logo.svg' %}" alt="TechNest" class="technest-logo">
+        </a>
+
+        <!-- Responsive Hamburger Toggle Checkbox (Pure CSS) -->
+        <input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox">
+
+        <!-- Navigation Menu Links -->
+        <ul class="nav-links">
+          <a href="{% url 'home' %}" class="nav-link active">Home</a>
+          <li><a href="#products" class="nav-link">Products</a></li>
+          <li><a href="#categories" class="nav-link">Categories</a></li>
+          <li>
+            <a href="#deals" class="nav-link">
+              Deals <span class="deals-tag">HOT</span>
+            </a>
+          </li>
+          <li><a href="#about" class="nav-link">About</a></li>
+        </ul>
+
+        <!-- Search Bar -->
+        <div class="search-wrapper">
+          <form class="search-form" action="{% url 'home' %}" method="get">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="search" name="search" class="search-input" placeholder="Search smartphones, laptops, audio..."
+              value="{{ request.GET.search|default:'' }}">
+          </form>
+        </div>
+        <!-- Right Side Nav Actions -->
+        <div class="nav-actions">
+
+          <!-- Cart Button -->
+          <a href="{% url 'cart' %}" class="icon-btn" title="View Cart">
+
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+
+            </svg>
+
+            <span class="cart-counter">{{ cart_count }}</span>
+
+          </a>
+
+          <!-- Wishlist Button -->
+          <a href="{% url 'wishlist' %}" class="icon-btn" title="View Wishlist">
+
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z">
+              </path>
+
+            </svg>
+
+            <span class="wishlist-counter">{{ wishlist_count }}</span>
+
+          </a>
+
+          {% include "shop/includes/profile_menu.html" %}
+
+          <!-- Mobile Hamburger Toggle Label -->
+          <label for="nav-toggle" class="hamburger-btn" aria-label="Toggle Navigation">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+          </label>
+
+        </div>
+  </header>
+
+  <!-- =========================================================================
+       3. Hero Section
+       ========================================================================= -->
+  <section class="hero-section">
+    <!-- Ambient glowing backgrounds -->
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+
+    <div class="container hero-grid">
+      <!-- Hero Text Content -->
+      <div class="hero-content">
+        <div class="hero-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+          <span>NEXT-GEN ELECTRONICS SALE</span>
+        </div>
+
+        <h1 class="hero-headline">
+          Upgrade Your <br>
+          <span class="gradient-text">Tech Life Today.</span>
+        </h1>
+
+        <p class="hero-desc">
+          Discover high-performance laptops, flagship smartphones, studio-grade wireless audio, and next-generation
+          gaming gear engineered for perfection.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#products" class="btn-primary">
+            <span>Shop Now</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="#deals" class="btn-secondary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <span>Explore Deals</span>
+          </a>
+        </div>
+
+        <!-- Trust Stats -->
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">50k+</span>
+            <span class="stat-label">Happy Techies</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Authentic Brands</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">2-Year</span>
+            <span class="stat-label">Official Warranty</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Visual Showcase -->
+      <div class="hero-visual">
+        <!-- Floating Badge 1 -->
+        <div class="floating-badge floating-badge-1">
+          <div class="floating-badge-icon fb-orange">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <div class="floating-badge-text">
+            <strong>Save 40% Off</strong>
+            <span>Flash Deal Special</span>
+          </div>
+        </div>
+
+        <!-- Featured Device Glass Card -->
+        <div class="showcase-card">
+          <div class="showcase-header">
+            <span class="chip-tag">FEATURED FLAGSHIP</span>
+            <div class="stars">
+              <svg width="14" height="14" fill="#f59e0b" viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg width="14" height="14" fill="#f59e0b" viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg width="14" height="14" fill="#f59e0b" viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg width="14" height="14" fill="#f59e0b" viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg width="14" height="14" fill="#f59e0b" viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+            </div>
+          </div>
+
+          <div class="device-preview-box">
+
+            {% if featured_product and featured_product.image %}
+
+            <a href="{% url 'product_detail' featured_product.slug %}">
+              <img src="{{ featured_product.image.url }}" alt="{{ featured_product.name }}" class="hero-product-image">
+            </a>
+
+            {% else %}
+
+            <div class="product-no-image">
+              No Image
+            </div>
+
+            {% endif %}
+
+          </div>
+
+
+          <div class="showcase-info">
+
+            {% if featured_product %}
+
+            <h3>{{ featured_product.name }}</h3>
+
+            <p>
+              {{ featured_product.description|truncatewords:10 }}
+            </p>
+
+            {% else %}
+
+            <h3>Featured Product</h3>
+
+            <p>Discover our latest technology.</p>
+
+            {% endif %}
+
+          </div>
+
+
+          <div class="showcase-meta">
+
+            {% if featured_product %}
+
+            <div class="showcase-price">
+
+              {% if featured_product.discount_price %}
+
+              ₹{{ featured_product.discount_price }}
+
+              <del>
+                ₹{{ featured_product.price }}
+              </del>
+
+              {% else %}
+
+              ₹{{ featured_product.price }}
+
+              {% endif %}
+
+            </div>
+
+
+            <a href="{% url 'product_detail' featured_product.slug %}" class="btn-primary"
+              style="padding: 0.5rem 1.25rem; font-size: 0.875rem;">
+              View Product
+            </a>
+
+            {% endif %}
+
+          </div>
+
+          <!-- Floating Badge 2 -->
+          <div class="floating-badge floating-badge-2">
+            <div class="floating-badge-icon fb-green">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+            <div class="floating-badge-text">
+              <strong>Verified Genuine</strong>
+              <span>Direct Brand Warranty</span>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+
+  <!-- =========================================================================
+       4. Product Categories Section
+       ========================================================================= -->
+  <section id="categories" class="categories-section">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="section-tag">Collections</span>
+        <h2 class="section-title">Explore Popular Categories</h2>
+        <p class="section-subtitle">
+          Browse through our meticulously curated categories featuring
+          high-demand tech and accessories.
+        </p>
+      </div>
+
+      <div class="categories-grid">
+
+        <a href="{% url 'home' %}#products" class="category-card">
+          <div class="cat-icon-box">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+            </svg>
+          </div>
+
+          <h3 class="cat-name">All Products</h3>
+
+          <span class="cat-count">View Everything</span>
+        </a>
+
+        {% for category in categories %}
+
+        <a href="?category={{ category.slug }}#products" class="category-card">
+
+          <div class="cat-icon-box">
+
+            {% if category.name == "Smartphones" %}
+
+            <!-- Smartphone Icon -->
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+              <line x1="12" y1="18" x2="12.01" y2="18"></line>
+            </svg>
+
+            {% elif category.name == "Laptops" %}
+
+            <!-- Laptop Icon -->
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="2" y1="20" x2="22" y2="20"></line>
+            </svg>
+
+            {% elif category.name == "Audio & Sound" %}
+
+            <!-- Headphones Icon -->
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+              <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z
+                     M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
+              </path>
+            </svg>
+
+            {% elif category.name == "Gaming" %}
+
+            <!-- Gaming Icon -->
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="6" y1="12" x2="10" y2="12"></line>
+              <line x1="8" y1="10" x2="8" y2="14"></line>
+              <line x1="15" y1="13" x2="15.01" y2="13"></line>
+              <line x1="18" y1="11" x2="18.01" y2="11"></line>
+              <rect x="2" y="6" width="20" height="12" rx="6"></rect>
+            </svg>
+
+            {% elif category.name == "Smartwatches" %}
+
+            <!-- Smartwatch Icon -->
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="7"></circle>
+              <polyline points="12 9 12 12 13.5 13.5"></polyline>
+              <path d="M16.51 17.35l-.35 3.83a2 2 0 0 1-2 1.82H9.83
+                     a2 2 0 0 1-2-1.82l-.35-3.83m.01-10.7l.35-3.83
+                     A2 2 0 0 1 9.83 1h4.35a2 2 0 0 1 2 1.82l.35 3.83">
+              </path>
+            </svg>
+
+            {% elif category.name == "Accessories" %}
+
+            <!-- Accessories Icon -->
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+              <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+              <line x1="6" y1="1" x2="6" y2="4"></line>
+              <line x1="10" y1="1" x2="10" y2="4"></line>
+              <line x1="14" y1="1" x2="14" y2="4"></line>
+            </svg>
+
+            {% else %}
+
+            <!-- Default Icon -->
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"></circle>
+              <line x1="12" y1="8" x2="12" y2="16"></line>
+              <line x1="8" y1="12" x2="16" y2="12"></line>
+            </svg>
+
+            {% endif %}
+
+          </div>
+
+          <h3 class="cat-name">{{ category.name }}</h3>
+
+          <span class="cat-count">
+            {{ category.products.count }} Products
+          </span>
+
+        </a>
+
+        {% empty %}
+
+        <p>No categories available.</p>
+
+        {% endfor %}
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+     5. Featured Products Section
+     ========================================================================= -->
+  <section id="products" class="products-section">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="section-tag">Featured</span>
+
+        <h2 class="section-title">
+          Featured Products
+        </h2>
+
+        <p class="section-subtitle">
+          Discover our latest and most popular technology products.
+        </p>
+      </div>
+
+      <div class="products-grid">
+
+        {% for product in products %}
+
+        <article class="product-card">
+
+          <!-- Product Image -->
+          <a href="{% url 'product_detail' product.slug %}" class="product-image-link">
+
+            <div class="product-image">
+
+              {% if product.discount_percentage %}
+              <div class="product-discount-banner" aria-label="{{ product.discount_percentage }}% off">
+                <span class="product-discount-lightning" aria-hidden="true">⚡</span>
+                <span>{{ product.discount_percentage }}% OFF</span>
+              </div>
+              {% endif %}
+
+              <button type="button"
+                class="wishlist-btn{% if product.id in wishlist_product_ids %} wishlisted{% endif %}"
+                data-url="{% url 'add_to_wishlist' product.slug %}" title="Add to Wishlist">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z">
+                  </path>
+                </svg>
+              </button>
+
+              {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}">
+              {% else %}
+              <div class="no-image">
+                No Image
+              </div>
+              {% endif %}
+
+            </div>
+
+          </a>
+
+
+          <!-- Product Information -->
+          <div class="product-info">
+
+            {% if product.brand %}
+            <span class="product-brand">
+              {{ product.brand }}
+            </span>
+            {% endif %}
+
+
+            <h3 class="product-name">
+              <a href="{% url 'product_detail' product.slug %}">
+                {{ product.name }}
+              </a>
+            </h3>
+
+
+            <p class="product-description">
+              {{ product.description|truncatewords:15 }}
+            </p>
+
+
+            <!-- Rating -->
+            <div class="product-rating">
+              ★ {{ product.rating }}
+            </div>
+
+
+            <!-- Price -->
+            <div class="product-price">
+
+              {% if product.discount_price %}
+
+              <span class="discount-price">
+                ₹{{ product.discount_price }}
+              </span>
+
+              <span class="original-price">
+                ₹{{ product.price }}
+              </span>
+
+              {% else %}
+
+              <span class="discount-price">
+                ₹{{ product.price }}
+              </span>
+
+              {% endif %}
+
+            </div>
+
+
+            <!-- Stock Status -->
+            {% if product.is_available and product.stock > 0 %}
+
+            <span class="stock-status">
+              In Stock
+            </span>
+
+            {% else %}
+
+            <span class="stock-status">
+              Out of Stock
+            </span>
+
+            {% endif %}
+
+
+            <!-- View Product -->
+            <a href="{% url 'product_detail' product.slug %}" class="product-button">
+              View Product
+            </a>
+
+          </div>
+
+        </article>
+
+
+        {% empty %}
+
+        <div class="empty-products">
+          <p>No products available yet.</p>
+        </div>
+
+        {% endfor %}
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =========================================================================
+       6. Live Coupon Deals & Offers Section
+       ========================================================================= -->
+  {% if coupon_slides %}
+  <section id="deals" class="deals-section">
+    <div class="container">
+      <div class="coupon-carousel" data-coupon-carousel>
+        {% for slide in coupon_slides %}
+        <article class="coupon-slide{% if forloop.first %} is-active{% endif %}" data-coupon-slide
+          data-expiry="{{ slide.expiry_iso }}">
+
+          <div class="coupon-slide-content">
+            <span class="deals-badge">LIMITED TIME FLASH SALE</span>
+
+            <h2 class="deals-title">{{ slide.offer_title }}</h2>
+
+            <p class="deals-desc">
+              {{ slide.offer_description }}
+              {% if slide.coupon.minimum_order_amount %}
+              Minimum order ₹{{ slide.coupon.minimum_order_amount|floatformat:0 }}.
+              {% endif %}
+            </p>
+
+            <div class="coupon-expiry-label">
+              <span>ENDS IN</span>
+            </div>
+
+            <div class="countdown-box coupon-countdown" data-countdown>
+              <div class="countdown-unit">
+                <span class="unit-number" data-days>00</span>
+                <span class="unit-label">Days</span>
+              </div>
+              <div class="countdown-unit">
+                <span class="unit-number" data-hours>00</span>
+                <span class="unit-label">Hours</span>
+              </div>
+              <div class="countdown-unit">
+                <span class="unit-number" data-minutes>00</span>
+                <span class="unit-label">Mins</span>
+              </div>
+              <div class="countdown-unit">
+                <span class="unit-number" data-seconds>00</span>
+                <span class="unit-label">Secs</span>
+              </div>
+            </div>
+
+            <div class="coupon-slide-actions">
+              <span class="coupon-pill">Promo Code: <code>{{ slide.coupon.code }}</code></span>
+              <a href="#products" class="btn-primary coupon-claim-button" data-coupon-code="{{ slide.coupon.code }}">
+                Shop Deal <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="coupon-product-visual">
+            <div class="coupon-product-card">
+              {% if slide.product and slide.product.image %}
+              <a href="{% url 'product_detail' slide.product.slug %}" class="coupon-product-image-link"
+                aria-label="View {{ slide.product.name }}">
+                <img src="{{ slide.product.image.url }}" alt="{{ slide.product.name }}" class="coupon-product-image">
+              </a>
+              {% else %}
+              <div class="coupon-product-placeholder">TechNest</div>
+              {% endif %}
+              <div class="coupon-product-glow"></div>
+              {% if slide.product %}
+              <div class="coupon-product-name">{{ slide.product.name }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+
+        {% if coupon_slides|length > 1 %}
+        <div class="coupon-carousel-dots" aria-label="Coupon offers">
+          {% for slide in coupon_slides %}
+          <button type="button" class="coupon-carousel-dot{% if forloop.first %} is-active{% endif %}"
+            data-coupon-dot="{{ forloop.counter0 }}" aria-label="Show offer {{ forloop.counter }}"></button>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- =========================================================================
+       7. Why Choose TechNest? Section
+       ========================================================================= -->
+  <section id="about" class="features-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">The TechNest Advantage</span>
+        <h2 class="section-title">Why Choose TechNest?</h2>
+        <p class="section-subtitle">We don't just sell electronics — we deliver dependable hardware, uncompromised
+          performance, and unrivaled customer trust.</p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+          </div>
+          <h3 class="feature-title">Fast & Free Delivery</h3>
+          <p class="feature-desc">Free express tracked shipping on all domestic orders over $50. Receive your gear in
+            2-3 business days.</p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">100% Secure Payment</h3>
+          <p class="feature-desc">End-to-end 256-bit SSL encrypted checkout. Supports Credit Cards, PayPal, Apple Pay,
+            and Google Pay.</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Genuine Products</h3>
+          <p class="feature-desc">100% authentic electronic items sourced directly from authorized factory distributors
+            with complete warranties.</p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+              </path>
+            </svg>
+          </div>
+          <h3 class="feature-title">24/7 Dedicated Support</h3>
+          <p class="feature-desc">Our tech specialists are available round the clock via live chat, email, and phone to
+            assist you anytime.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       9. Professional Footer
+       ========================================================================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Col 1: Brand Info -->
+        <div class="footer-brand-col">
+          <a href="#" class="footer-logo" aria-label="TechNest Home">
+            <img src="{% static 'shop/images/opo.svg' %}" alt="TechNest" class="technest-footer-logo">
+          </a>
+
+          <p class="footer-tagline">
+            Your premier destination for high-performance consumer technology, audio gear, computing hardware, and smart
+            lifestyle electronics.
+          </p>
+
+          <!-- Social Media Icons -->
+          <div class="social-links">
+            <a href="#" class="social-btn" title="Twitter / X">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+            </a>
+            <a href="#" class="social-btn" title="GitHub">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+              </svg>
+            </a>
+            <a href="#" class="social-btn" title="YouTube">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+              </svg>
+            </a>
+            <a href="#" class="social-btn" title="LinkedIn">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div>
+          <h4 class="footer-col-title">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#products">All Products</a></li>
+            <li><a href="#categories">Categories</a></li>
+            <li><a href="#deals">Flash Deals</a></li>
+            <li><a href="#about">About TechNest</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Customer Support -->
+        <div>
+          <h4 class="footer-col-title">Customer Support</h4>
+          <ul class="footer-links">
+            <li><a href="{% url 'my_orders' %}">Track Order</a></li>
+            <li><a href="#shipping">Shipping & Delivery</a></li>
+            <li><a href="#returns">Returns & Exchanges</a></li>
+            <li><a href="#warranty">Warranty Policy</a></li>
+            <li><a href="#faq">Frequently Asked Questions</a></li>
+            <li><a href="#privacy">Privacy & Security</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Contact Information -->
+        <div>
+          <h4 class="footer-col-title">Contact Us</h4>
+          <ul class="contact-info-list">
+            <li class="contact-item">
+              <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>100 Innovation Way, Silicon Valley, CA 94025</span>
+            </li>
+            <li class="contact-item">
+              <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                </path>
+              </svg>
+              <span>+91 5976598326 </span>
+            </li>
+            <li class="contact-item">
+              <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              <span>support@technest.io</span>
+            </li>
+            <li class="contact-item">
+              <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>Mon - Sun: 24/7 Support</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Bar -->
+      <div class="footer-bottom">
+        <p>&copy; 2026 TechNest Inc. All rights reserved. Designed for next-gen performance.</p>
+        <div class="footer-bottom-links">
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#terms">Terms of Service</a>
+          <a href="#cookies">Cookie Settings</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="wishlist-toast" class="wishlist-toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.has("search") && params.get("search").trim() !== "") {
+      document.getElementById("products").scrollIntoView({
+        behavior: "smooth"
+      });
+    }
+  </script>
+
+  <script>
+    function getCookie(name) {
+      let cookieValue = null;
+
+      if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+
+          if (cookie.substring(0, name.length + 1) === (name + "=")) {
+            cookieValue = decodeURIComponent(
+              cookie.substring(name.length + 1)
+            );
+            break;
+          }
+        }
+      }
+
+      return cookieValue;
+    }
+
+    const csrftoken = getCookie("csrftoken");
+    document.querySelectorAll(".wishlist-btn").forEach(button => {
+      button.addEventListener("click", function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        fetch(this.dataset.url, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrftoken
+          },
+          mode: "same-origin"
+        })
+          .then(response => response.json())
+          .then(data => {
+
+            if (data.success) {
+
+              if (data.wishlisted) {
+                this.classList.add("wishlisted");
+                this.title = "Remove from Wishlist";
+              } else {
+                this.classList.remove("wishlisted");
+                this.title = "Add to Wishlist";
+              }
+
+              const toast = document.getElementById("wishlist-toast");
+
+              toast.textContent = data.message;
+              toast.classList.add("show");
+
+
+
+              document.querySelector(".wishlist-counter").textContent = data.wishlist_count;
+
+              setTimeout(() => {
+                toast.classList.remove("show");
+              }, 2000);
+
+
+            }
+
+          });
+      });
+    });
+
+  </script>
+
+  <div class="technest-ai">
+
+    <!-- Floating Chat Button -->
+    <button class="technest-ai-launcher" id="technest-ai-launcher" type="button">
+
+      <span class="technest-ai-hint">
+        Need help choosing?
+      </span>
+
+      <span class="technest-ai-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="15" rx="4"></rect>
+          <path d="M8 19v2l4-2h3"></path>
+          <circle cx="9" cy="11" r="1"></circle>
+          <circle cx="15" cy="11" r="1"></circle>
+          <path d="M9 15c1 .8 2 .8 3 .8s2 0 3-.8"></path>
+        </svg>
+      </span>
+
+    </button>
+
+
+    <!-- Chat Window -->
+    <div class="technest-ai-panel" id="technest-ai-panel">
+
+      <!-- Header -->
+      <div class="technest-ai-header">
+
+        <div class="technest-ai-agent">
+
+          <div class="technest-ai-avatar">
+            <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="15" rx="4"></rect>
+              <path d="M8 19v2l4-2h3"></path>
+              <circle cx="9" cy="11" r="1"></circle>
+              <circle cx="15" cy="11" r="1"></circle>
+              <path d="M9 15c1 .8 2 .8 3 .8s2 0 3-.8"></path>
+            </svg>
+          </div>
+
+          <div>
+            <strong>TechNest AI</strong>
+            <span>Your Shopping Expert</span>
+          </div>
+
+        </div>
+
+
+        <!-- Minimize -->
+        <button class="technest-ai-minimize" id="technest-ai-minimize" type="button" aria-label="Minimize chat">
+          −
+        </button>
+
+      </div>
+
+
+      <!-- Messages -->
+      <div class="technest-ai-messages" id="technest-ai-messages">
+
+        <div class="technest-ai-message ai">
+          <div class="technest-ai-message-avatar">
+            🤖
+          </div>
+
+          <div class="technest-ai-bubble">
+            Hi! 👋 I'm your TechNest Shopping Expert.
+            <br><br>
+            I can help you find the right tech for your needs and budget.
+            What are you looking for today?
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- Input -->
+      <div class="technest-ai-input-area">
+
+        <input type="text" id="technest-ai-input" class="technest-ai-input" placeholder="Ask me about a product..."
+          autocomplete="off">
+
+        <button type="button" id="technest-ai-send" class="technest-ai-send" aria-label="Send message">
+
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <style>
+    /* =========================================================
+            TechNest AI Shopping Expert
+            ========================================================= */
+
+    .technest-ai {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 10000;
+      font-family: inherit;
+    }
+
+
+    /* Floating launcher */
+
+    .technest-ai-launcher {
+      position: relative;
+      width: 62px;
+      height: 62px;
+      border: none;
+      border-radius: 50%;
+      background: var(--accent-gradient);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow:
+        0 12px 30px rgba(37, 99, 235, 0.28),
+        0 4px 10px rgba(15, 23, 42, 0.12);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .technest-ai-launcher:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow:
+        0 16px 35px rgba(37, 99, 235, 0.35),
+        0 6px 14px rgba(15, 23, 42, 0.14);
+    }
+
+    .technest-ai-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+
+    /* Small floating hint */
+
+    .technest-ai-hint {
+      position: absolute;
+      right: 72px;
+      bottom: 10px;
+      width: max-content;
+      max-width: 190px;
+      padding: 9px 13px;
+      background: #ffffff;
+      color: #0f172a;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px 12px 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+      white-space: nowrap;
+    }
+
+
+    /* Chat panel */
+
+    .technest-ai-panel {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 370px;
+      height: 540px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 25px 70px rgba(15, 23, 42, 0.20);
+
+      display: flex;
+      flex-direction: column;
+
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px) scale(0.96);
+      transform-origin: bottom right;
+
+      transition:
+        opacity 0.22s ease,
+        visibility 0.22s ease,
+        transform 0.22s ease;
+    }
+
+    .technest-ai-panel.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    .technest-ai-panel.open+* {
+      display: none;
+    }
+
+
+    /* Header */
+
+    .technest-ai-header {
+      flex - shrink: 0;
+      padding: 15px 16px;
+      background: var(--dark-bg);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .technest-ai-agent {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .technest-ai-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--accent-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .technest-ai-agent strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .technest-ai-agent span {
+      display: block;
+      margin-top: 2px;
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .technest-ai-minimize {
+      width: 34px;
+      height: 34px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .technest-ai-minimize:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+
+    /* Messages */
+
+    .technest-ai-messages {
+      flex: 1;
+      padding: 18px;
+      overflow-y: auto;
+      background: #f8fafc;
+    }
+
+    .technest-ai-message {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .technest-ai-message-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #e0f2fe;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .technest-ai-message.user {
+      justify-content: flex-end;
+    }
+
+    .technest-ai-message.user .technest-ai-bubble {
+      margin-left: auto;
+    }
+
+    .technest-ai-bubble {
+      max - width: 82%;
+      padding: 12px 14px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px 15px 15px 15px;
+      color: #334155;
+      font-size: 13px;
+      line-height: 1.55;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+
+
+    /* Input */
+
+    .technest-ai-input-area {
+      flex - shrink: 0;
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .technest-ai-input {
+      flex: 1;
+      min-width: 0;
+      height: 44px;
+      padding: 0 13px;
+      border: 1px solid #dbe3ed;
+      border-radius: 12px;
+      outline: none;
+      font-family: inherit;
+      font-size: 13px;
+      color: #0f172a;
+      background: #f8fafc;
+    }
+
+    .technest-ai-input:focus {
+      border - color: var(--primary);
+      background: #ffffff;
+    }
+
+    .technest-ai-send {
+      width: 44px;
+      height: 44px;
+      border: none;
+      border-radius: 12px;
+      background: var(--primary);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .technest-ai-send:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+
+    /* Mobile */
+
+    @media (max-width: 500px) {
+
+      .technest - ai {
+        right: 14px;
+        bottom: 14px;
+      }
+
+      .technest-ai-panel {
+        width: calc(100vw - 28px);
+        height: min(560px, calc(100vh - 100px));
+      }
+
+      .technest-ai-hint {
+        display: none;
+      }
+
+    }
+
+    .technest-ai-product-card {
+      margin-top: 10px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    }
+
+    .technest-ai-product-image {
+      width: 100%;
+      height: 150px;
+      object-fit: contain;
+      background: #ffffff;
+      display: block;
+    }
+
+    .technest-ai-product-info {
+      padding: 12px;
+    }
+
+    .technest-ai-product-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f172a;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .technest-ai-product-price {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .technest-ai-product-original {
+      margin-left: 6px;
+      font-size: 12px;
+      color: #94a3b8;
+      text-decoration: line-through;
+    }
+
+    .technest-ai-product-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .technest-ai-product-rating {
+      color: #f59e0b;
+      font-weight: 600;
+    }
+
+    .technest-ai-product-stock {
+      color: #16a34a;
+      font-weight: 600;
+    }
+
+    .technest-ai-product-stock.out {
+      color: #dc2626;
+    }
+
+    .technest-ai-product-button {
+      display: block;
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: #2563eb;
+      color: #ffffff;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .technest-ai-product-button:hover {
+      background: #1d4ed8;
+    }
+  </style>
+
+
+
+
+
+  <script>
+    /* =========================================================
+                TechNest AI UI Controls
+                ========================================================= */
+
+    const technestAiLauncher =
+      document.getElementById("technest-ai-launcher");
+
+    const technestAiPanel =
+      document.getElementById("technest-ai-panel");
+
+    const technestAiMinimize =
+      document.getElementById("technest-ai-minimize");
+
+    const technestAiInput =
+      document.getElementById("technest-ai-input");
+
+    const technestAiSend =
+      document.getElementById("technest-ai-send");
+
+    const technestAiMessages =
+      document.getElementById("technest-ai-messages");
+
+    technestAiSend.addEventListener("click", async function () {
+      const message = technestAiInput.value.trim();
+
+      if (!message) {
+        return;
+      }
+
+      // Show user's message
+      const userMessage = document.createElement("div");
+      userMessage.className = "technest-ai-message user";
+
+      userMessage.innerHTML = `
+    <div class="technest-ai-bubble"></div>
+  `;
+
+      userMessage.querySelector(".technest-ai-bubble").textContent = message;
+
+      technestAiMessages.appendChild(userMessage);
+
+      // Clear input
+      technestAiInput.value = "";
+
+      // Scroll to latest message
+      technestAiMessages.scrollTop =
+        technestAiMessages.scrollHeight;
+
+      console.log("Sending AI message:", message);
+
+      const response = await fetch("{% url 'ai_chat' %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+          "X-CSRFToken": getCookie("csrftoken")
+        },
+        mode: "same-origin",
+        body: new URLSearchParams({
+          message: message
+        })
+      });
+
+      const data = await response.json();
+
+      console.log("AI response:", data);
+      console.log("WISHLIST COUNT FROM AI:", data.wishlist_count);
+
+      if (data.success) {
+        // ==============================
+        // UPDATE CART COUNT INSTANTLY
+        // ==============================
+
+        if (data.cart_count !== undefined) {
+          const cartCounter = document.querySelector(".cart-counter");
+
+          if (cartCounter) {
+            cartCounter.textContent = data.cart_count;
+          }
+        }
+
+
+        // ==============================
+        // UPDATE WISHLIST COUNT INSTANTLY
+        // ==============================
+
+        if (data.wishlist_count !== undefined) {
+          const wishlistCounter =
+            document.querySelector(".wishlist-counter");
+
+          if (wishlistCounter) {
+            wishlistCounter.textContent = data.wishlist_count;
+          }
+        }
+        // Show AI response
+        const aiMessage = document.createElement("div");
+        aiMessage.className = "technest-ai-message ai";
+
+        aiMessage.innerHTML = `
+    <div class="technest-ai-message-avatar">
+      🤖
+    </div>
+
+    <div>
+      <div class="technest-ai-bubble"></div>
+    </div>
+  `;
+
+        aiMessage.querySelector(".technest-ai-bubble").textContent =
+          data.reply;
+
+        technestAiMessages.appendChild(aiMessage);
+
+        // Show recommended product if available
+        if (data.product) {
+          const product = data.product;
+
+          const productCard = document.createElement("div");
+          productCard.className = "technest-ai-product-card";
+
+          const image = document.createElement("img");
+          image.className = "technest-ai-product-image";
+
+          if (product.image) {
+            image.src = product.image;
+            image.alt = product.name;
+          }
+
+          const productInfo = document.createElement("div");
+          productInfo.className = "technest-ai-product-info";
+
+          const productName = document.createElement("div");
+          productName.className = "technest-ai-product-name";
+          productName.textContent = product.name;
+
+          const price = document.createElement("div");
+          price.className = "technest-ai-product-price";
+          price.textContent = `₹${product.price}`;
+
+          if (product.original_price) {
+            const originalPrice = document.createElement("span");
+            originalPrice.className = "technest-ai-product-original";
+            originalPrice.textContent = `₹${product.original_price}`;
+
+            price.appendChild(originalPrice);
+          }
+
+          const meta = document.createElement("div");
+          meta.className = "technest-ai-product-meta";
+
+          const rating = document.createElement("span");
+          rating.className = "technest-ai-product-rating";
+          rating.textContent = `★ ${product.rating}`;
+
+          const stock = document.createElement("span");
+
+          if (product.is_available && product.stock > 0) {
+            stock.className = "technest-ai-product-stock";
+            stock.textContent = `In Stock (${product.stock})`;
+          } else {
+            stock.className = "technest-ai-product-stock out";
+            stock.textContent = "Out of Stock";
+          }
+
+          meta.appendChild(rating);
+          meta.appendChild(stock);
+
+          const viewButton = document.createElement("a");
+          viewButton.className = "technest-ai-product-button";
+          viewButton.href = product.url;
+          viewButton.textContent = "View Product";
+
+          productInfo.appendChild(productName);
+          productInfo.appendChild(price);
+          productInfo.appendChild(meta);
+          productInfo.appendChild(viewButton);
+
+          if (product.image) {
+            productCard.appendChild(image);
+          }
+
+          productCard.appendChild(productInfo);
+
+          aiMessage.querySelector("div:last-child").appendChild(productCard);
+        }
+
+        // Scroll to latest message
+        technestAiMessages.scrollTop =
+          technestAiMessages.scrollHeight;
+      }
+    });
+
+    technestAiLauncher.addEventListener("click", function () {
+      technestAiPanel.classList.add("open");
+      technestAiLauncher.style.display = "none";
+
+      setTimeout(() => {
+        document.getElementById("technest-ai-input").focus();
+      }, 250);
+    });
+
+
+    technestAiMinimize.addEventListener("click", function () {
+      technestAiPanel.classList.remove("open");
+      technestAiLauncher.style.display = "flex";
+
+
+    });
+  </script>
+
+
+
+  </script>
+
+  <script>
+    const profileButton = document.getElementById("profileMenuButton");
+    const profileDropdown = document.getElementById("profileDropdown");
+
+    profileButton.addEventListener("click", function (event) {
+      event.stopPropagation();
+      profileDropdown.classList.toggle("show");
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!profileDropdown.contains(event.target) &&
+        !profileButton.contains(event.target)) {
+        profileDropdown.classList.remove("show");
+      }
+    });
+  </script>
+
+
+  <script>
+    (function () {
+      const carousel = document.querySelector('[data-coupon-carousel]');
+      if (!carousel) return;
+
+      const slides = Array.from(carousel.querySelectorAll('[data-coupon-slide]'));
+      const dots = Array.from(carousel.querySelectorAll('[data-coupon-dot]'));
+      let activeIndex = 0;
+      let timer = null;
+
+      function pad(value) {
+        return String(Math.max(0, value)).padStart(2, '0');
+      }
+
+      function updateCountdown(slide) {
+        const expiry = new Date(slide.dataset.expiry);
+        const remaining = Math.max(0, expiry.getTime() - Date.now());
+        const totalSeconds = Math.floor(remaining / 1000);
+
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        slide.querySelector('[data-days]').textContent = pad(days);
+        slide.querySelector('[data-hours]').textContent = pad(hours);
+        slide.querySelector('[data-minutes]').textContent = pad(minutes);
+        slide.querySelector('[data-seconds]').textContent = pad(seconds);
+
+        if (remaining <= 0) {
+          slide.classList.add('is-expired');
+        }
+      }
+
+      function showSlide(index, restartTimer = true) {
+        if (!slides.length) return;
+        activeIndex = (index + slides.length) % slides.length;
+
+        slides.forEach((slide, i) => {
+          slide.classList.toggle('is-active', i === activeIndex);
+        });
+
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('is-active', i === activeIndex);
+        });
+
+        updateCountdown(slides[activeIndex]);
+
+        if (restartTimer && slides.length > 1) {
+          clearTimeout(timer);
+          timer = setTimeout(() => showSlide(activeIndex + 1), 12000);
+        }
+      }
+
+      slides.forEach(updateCountdown);
+      setInterval(() => {
+        slides.forEach(updateCountdown);
+      }, 1000);
+
+      dots.forEach((dot) => {
+        dot.addEventListener('click', () => {
+          showSlide(Number(dot.dataset.couponDot));
+        });
+      });
+
+      // Keep the existing homepage navigation behavior, but copy the real
+      // coupon code when the visitor clicks the deal button.
+      carousel.querySelectorAll('[data-coupon-code]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const code = button.dataset.couponCode;
+          try {
+            await navigator.clipboard.writeText(code);
+            const original = button.innerHTML;
+            button.innerHTML = 'Code Copied ✓';
+            setTimeout(() => { button.innerHTML = original; }, 1400);
+          } catch (error) {
+            // Clipboard permission is optional; the visible code remains available.
+          }
+        });
+      });
+
+      showSlide(0, true);
+    })();
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,170 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Order Successful | TechNest</title>
+
+    <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+</head>
+
+<body>
+
+    <main class="checkout-page">
+
+        <div class="checkout-container order-success-container">
+
+            <!-- Success Header -->
+            <div class="success-header">
+
+                <div class="success-icon">
+                    ✓
+                </div>
+
+                <h1>
+                    Order Placed Successfully!
+                </h1>
+
+                <p>
+                    Thank you for shopping with TechNest.
+                    Your order has been received.
+                </p>
+
+            </div>
+
+
+            <!-- Order Information -->
+            <section class="success-card">
+
+                <div class="success-card-header">
+
+                    <h2>
+                        Order #{{ order.id }}
+                    </h2>
+
+                    <span class="order-status">
+                        {{ order.get_status_display }}
+                    </span>
+
+                </div>
+
+
+                <!-- Customer Details -->
+                <div class="success-details">
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Name
+                        </span>
+
+                        <strong>
+                            {{ order.full_name }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Phone
+                        </span>
+
+                        <strong>
+                            {{ order.phone }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Address
+                        </span>
+
+                        <strong>
+                            {{ order.address }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            City
+                        </span>
+
+                        <strong>
+                            {{ order.city }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            PIN Code
+                        </span>
+
+                        <strong>
+                            {{ order.pin_code }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Payment Method
+                        </span>
+
+                        <strong>
+                            {{ order.get_payment_method_display }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Total -->
+                <div class="success-total">
+
+                    <span>
+                        Total Amount
+                    </span>
+
+                    <strong>
+                        ₹{{ order.total_amount }}
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+            <!-- Continue Shopping -->
+            <div class="success-actions">
+
+                <a href="{% url 'home' %}" class="continue-shopping-btn">
+                    Continue Shopping
+                </a>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

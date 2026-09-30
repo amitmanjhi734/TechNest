@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: technest
+    runtime: python
+    buildCommand: ./build.sh
+    startCommand: gunicorn technest.wsgi:application
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
+      - key: DATABASE_SSL_REQUIRE
+        value: true

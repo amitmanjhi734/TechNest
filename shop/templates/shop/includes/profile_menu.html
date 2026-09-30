@@ -1,0 +1,73 @@
+{% if user.is_authenticated %}
+
+<div class="profile-menu">
+
+    <button type="button"
+            class="login-btn"
+            id="profileMenuButton"
+            aria-expanded="false"
+            aria-haspopup="true">
+
+        <svg width="18" height="18"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+
+        <span>{{ user.username }}</span>
+        <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </button>
+
+    <div class="profile-dropdown" id="profileDropdown" role="menu">
+
+        <a href="{% url 'my_orders' %}" role="menuitem">
+            Orders
+        </a>
+
+        <a href="{% url 'wishlist' %}" role="menuitem">
+            Wishlist
+        </a>
+
+        <a href="{% url 'cart' %}" role="menuitem">
+            Cart
+        </a>
+
+        <a href="{% url 'saved_addresses' %}" role="menuitem">
+            Saved Address
+        </a>
+
+        <a href="{% url 'logout' %}" class="logout-link" role="menuitem">
+            Log out
+        </a>
+
+    </div>
+
+</div>
+
+{% else %}
+
+<a href="{% url 'login' %}" class="login-btn">
+
+    <svg width="18" height="18"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+    </svg>
+
+    <span>Login</span>
+
+</a>
+
+{% endif %}

@@ -1,0 +1,83 @@
+{% load static %}
+<!-- =========================================================================
+     TechNest Unified Header Navigation
+     ========================================================================= -->
+<header class="site-header">
+  <div class="container">
+    <nav class="navbar">
+      <!-- Brand Logo -->
+      <a href="{% url 'home' %}" class="brand-logo" aria-label="TechNest Home">
+        <img src="{% static 'shop/images/technest-logo.svg' %}" alt="TechNest" class="technest-logo">
+      </a>
+
+      <!-- Responsive Hamburger Toggle Checkbox (Pure CSS) -->
+      <input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox">
+
+      <!-- Navigation Menu Links -->
+      <ul class="nav-links">
+        <li><a href="{% url 'home' %}" class="nav-link">Home</a></li>
+        <li><a href="{% url 'home' %}#products" class="nav-link">Products</a></li>
+        <li><a href="{% url 'home' %}#categories" class="nav-link">Categories</a></li>
+        <li>
+          <a href="{% url 'home' %}#deals" class="nav-link">
+            Deals <span class="deals-tag">HOT</span>
+          </a>
+        </li>
+        <li><a href="{% url 'home' %}#about" class="nav-link">About</a></li>
+      </ul>
+
+      <!-- Right Side Nav Actions -->
+      <div class="nav-actions">
+        <!-- Wishlist Button -->
+        <a href="{% url 'wishlist' %}" class="icon-btn" title="View Wishlist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z">
+            </path>
+          </svg>
+          <span class="wishlist-counter">{{ wishlist_count|default:0 }}</span>
+        </a>
+
+        <!-- Cart Button -->
+        <a href="{% url 'cart' %}" class="icon-btn" title="View Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span class="cart-counter">{{ cart_count|default:0 }}</span>
+        </a>
+
+        {% include "shop/includes/profile_menu.html" %}
+
+        <!-- Mobile Hamburger Toggle Label -->
+        <label for="nav-toggle" class="hamburger-btn" aria-label="Toggle Navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </label>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Ensure profile dropdown operates cleanly across all pages
+  (function () {
+    const profileBtn = document.getElementById("profileMenuButton");
+    const profileDropdown = document.getElementById("profileDropdown");
+    if (profileBtn && profileDropdown) {
+      profileBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        profileDropdown.classList.toggle("show");
+      });
+      document.addEventListener("click", function (e) {
+        if (!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+          profileDropdown.classList.remove("show");
+        }
+      });
+    }
+  })();
+</script>

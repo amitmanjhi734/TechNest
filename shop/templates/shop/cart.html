@@ -1,0 +1,172 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Shopping Cart | TechNest</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+</head>
+
+<body class="page-with-ambient-bg">
+
+    <!-- Unified Site Header -->
+    {% include "shop/includes/site_header.html" %}
+
+    <main class="cart-page-modern">
+        <!-- Ambient Background Glow & Decorative Wave -->
+        <div class="ambient-glow glow-top-left" aria-hidden="true"></div>
+        <div class="ambient-glow glow-bottom-right" aria-hidden="true"></div>
+        <div class="ambient-wave" aria-hidden="true"></div>
+
+        <div class="cart-container-modern animate-fade-in">
+
+            <!-- Card Header -->
+            <div class="cart-page-header">
+                <div class="cart-header-icon-box" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="cart-page-title">Your Shopping Cart</h1>
+                    <p class="cart-page-subtitle">Review your items before proceeding to checkout.</p>
+                </div>
+            </div>
+
+            {% if cart_items %}
+
+            <!-- Items List -->
+            <div class="cart-items-wrapper">
+                {% for item in cart_items %}
+                <div class="cart-item-card">
+
+                    <!-- Product Image -->
+                    <div class="cart-item-img-container">
+                        {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                        {% else %}
+                        <div class="no-img-placeholder">TechNest</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Product Details -->
+                    <div class="cart-item-details">
+                        <h2 class="cart-item-title">{{ item.product.name }}</h2>
+                        <p class="cart-item-unit-price">
+                            ₹{{ item.product.discount_price|default:item.product.price }}
+                        </p>
+
+                        <!-- Quantity Selector -->
+                        <div class="cart-item-actions-row">
+                            <div class="cart-quantity-box">
+                                <span class="quantity-label">Quantity:</span>
+                                <div class="quantity-pill">
+                                    <form method="POST" action="{% url 'decrease_quantity' slug=item.product.slug %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="qty-btn" aria-label="Decrease quantity">−</button>
+                                    </form>
+
+                                    <span class="qty-count">{{ item.quantity }}</span>
+
+                                    <form method="POST" action="{% url 'increase_quantity' slug=item.product.slug %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="qty-btn" aria-label="Increase quantity">+</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Remove Button -->
+                            <form method="POST" action="{% url 'remove_from_cart' slug=item.product.slug %}" class="remove-form">
+                                {% csrf_token %}
+                                <button type="submit" class="cart-remove-pill" aria-label="Remove item from cart">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                                    </svg>
+                                    <span>Remove</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Item Total Price (Right side) -->
+                    <div class="cart-item-subtotal">
+                        <strong>₹{{ item.get_total_price }}</strong>
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Cart Total Summary Card -->
+            <div class="cart-summary-card">
+                <div class="cart-summary-info">
+                    <span class="cart-summary-label">Cart Total</span>
+                    <span class="cart-summary-tax-note">Inclusive of all taxes</span>
+                </div>
+                <div class="cart-summary-price">
+                    <strong>₹{{ total }}</strong>
+                </div>
+            </div>
+
+            <!-- Footer Action Row -->
+            <div class="cart-footer-actions">
+                <a href="{% url 'home' %}" class="continue-shopping-link">
+                    <span aria-hidden="true">←</span> Continue Shopping
+                </a>
+
+                <a href="{% url 'checkout' %}" class="cart-checkout-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span>Proceed to Checkout</span>
+                    <span aria-hidden="true">→</span>
+                </a>
+            </div>
+
+            {% else %}
+
+            <!-- Empty Cart State -->
+            <div class="empty-cart-state">
+                <div class="empty-cart-icon-wrapper">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </div>
+                <h2>Your Shopping Cart is Empty</h2>
+                <p>Looks like you haven't added anything to your cart yet. Explore our latest electronics and tech essentials.</p>
+                <a href="{% url 'home' %}" class="empty-cart-cta-btn">
+                    <span>Explore Products</span>
+                    <span aria-hidden="true">→</span>
+                </a>
+            </div>
+
+            {% endif %}
+
+        </div>
+    </main>
+
+</body>
+
+</html>

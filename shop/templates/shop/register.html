@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - TechNest</title>
+    <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+</head>
+
+<body class="auth-page">
+
+
+    <div class="auth-shell auth-register-shell">
+        <div class="auth-brand-panel">
+            <a href="{% url 'home' %}" class="auth-brand" aria-label="TechNest home">
+                <img src="{% static 'shop/images/opo.svg' %}" alt="TechNest" class="auth-brand-logo">
+            </a>
+
+            <div class="auth-brand-content">
+                <span class="auth-brand-badge">JOIN TECHNEST</span>
+                <h1>Build your<br><span>tech nest.</span></h1>
+                <p>Create your account once and keep your shopping experience connected across TechNest.</p>
+
+                <div class="auth-benefits">
+                    <div class="auth-benefit">
+                        <span class="auth-benefit-icon">✓</span>
+                        <div><strong>Save your addresses</strong><small>Home, office or any delivery location.</small>
+                        </div>
+                    </div>
+                    <div class="auth-benefit">
+                        <span class="auth-benefit-icon">✓</span>
+                        <div><strong>Track your orders</strong><small>Keep your TechNest purchases together.</small>
+                        </div>
+                    </div>
+                    <div class="auth-benefit">
+                        <span class="auth-benefit-icon">✓</span>
+                        <div><strong>Keep your wishlist</strong><small>Come back to the products you love.</small></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-panel-footer">© {% now "Y" %} TechNest. All rights reserved.</div>
+        </div>
+
+        <main class="auth-card-wrap">
+            <div class="auth-card auth-register-card">
+                <a href="{% url 'home' %}" class="auth-mobile-brand">Tech<span>Nest</span></a>
+
+                <div class="auth-card-heading">
+                    <span class="auth-icon-circle" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <line x1="19" y1="8" x2="19" y2="14"></line>
+                            <line x1="16" y1="11" x2="22" y2="11"></line>
+                        </svg>
+                    </span>
+                    <span class="auth-eyebrow">CREATE ACCOUNT</span>
+                    <h2>Welcome to TechNest</h2>
+                    <p>Create your account and make your next checkout easier.</p>
+                </div>
+
+                {% if messages %}
+                <div class="auth-messages">
+                    {% for message in messages %}
+                    <div class="auth-message {% if message.tags %}{{ message.tags }}{% endif %}">
+                        <span class="auth-message-icon">!</span>
+                        <span>{{ message }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <form method="POST" class="auth-form">
+                    {% csrf_token %}
+
+                    <div class="auth-field">
+                        <label for="username">Username</label>
+                        <div class="auth-input-wrap">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <input type="text" id="username" name="username" placeholder="Choose a username"
+                                autocomplete="username" required autofocus>
+                        </div>
+                        <small class="auth-field-help">This will be used to sign in to your TechNest account.</small>
+                    </div>
+
+                    <div class="auth-field">
+                        <label for="password">Password</label>
+                        <div class="auth-input-wrap">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            <input type="password" id="password" name="password" placeholder="Create a password"
+                                autocomplete="new-password" required>
+                            <button type="button" class="auth-password-toggle" data-target="password"
+                                aria-label="Show password">Show</button>
+                        </div>
+                    </div>
+
+                    <div class="auth-field">
+                        <label for="password_confirm">Confirm password</label>
+                        <div class="auth-input-wrap">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M20 7 10 17l-5-5"></path>
+                            </svg>
+                            <input type="password" id="password_confirm" name="password2"
+                                placeholder="Enter your password again" autocomplete="new-password" required>
+                            <button type="button" class="auth-password-toggle" data-target="password_confirm"
+                                aria-label="Show password">Show</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="auth-submit-btn">
+                        <span>Create Account</span>
+                        <span aria-hidden="true">→</span>
+                    </button>
+                </form>
+
+                <p class="auth-terms">By creating an account, you can save addresses and keep your TechNest shopping
+                    activity connected to your account.</p>
+
+                <div class="auth-divider"><span>Already have an account?</span></div>
+
+                <a href="{% url 'login' %}" class="auth-secondary-btn">Sign in to TechNest</a>
+
+                <a href="{% url 'home' %}" class="auth-back-home">← Back to TechNest</a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".auth-password-toggle").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    const input = document.getElementById(button.dataset.target);
+                    if (!input) return;
+                    const visible = input.type === "text";
+                    input.type = visible ? "password" : "text";
+                    button.textContent = visible ? "Show" : "Hide";
+                    button.setAttribute("aria-label", visible ? "Show password" : "Hide password");
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

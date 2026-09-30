@@ -1,0 +1,129 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | TechNest</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+</head>
+
+<body class="page-with-ambient-bg">
+
+    <!-- Unified Site Header -->
+    {% include "shop/includes/site_header.html" %}
+
+    <main class="orders-page-modern">
+        <!-- Ambient Background Glow & Decorative Wave -->
+        <div class="ambient-glow glow-top-left" aria-hidden="true"></div>
+        <div class="ambient-glow glow-bottom-right" aria-hidden="true"></div>
+        <div class="ambient-wave" aria-hidden="true"></div>
+
+        <div class="orders-container-modern animate-fade-in">
+
+            <!-- Subheader Back Link -->
+            <div class="orders-back-wrapper">
+                <a href="{% url 'home' %}" class="orders-back-pill">
+                    <span aria-hidden="true">←</span>
+                    <span class="home-icon" aria-hidden="true">🏠</span>
+                    <span>Back to Home</span>
+                </a>
+            </div>
+
+            <!-- Page Title Section -->
+            <div class="orders-headline-section">
+                <span class="orders-section-subtitle">YOUR ORDERS</span>
+                <h1 class="orders-main-title">My Orders</h1>
+                <p class="orders-subtext">View your TechNest orders and their status.</p>
+            </div>
+
+            {% if orders %}
+
+            <!-- Order Cards Stack -->
+            <div class="orders-cards-list">
+                {% for order in orders %}
+                <div class="order-overview-card">
+
+                    <!-- Order Header Row -->
+                    <div class="order-overview-header">
+                        <div class="order-number-date-group">
+                            <span class="order-eyebrow">ORDER</span>
+                            <h2 class="order-id-heading">#{{ order.id }}</h2>
+                            <p class="order-timestamp">{{ order.created_at|date:"d M Y, h:i A" }}</p>
+                        </div>
+
+                        <!-- Status Badge Pill -->
+                        <div class="order-status-badge {{ order.status }}">
+                            <span class="status-indicator-dot">●</span>
+                            <span>{{ order.get_status_display }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="order-card-divider" aria-hidden="true"></div>
+
+                    <!-- Order Info Grid -->
+                    <div class="order-overview-info-grid">
+                        <div class="info-metric-col">
+                            <span class="metric-label">Payment</span>
+                            <strong class="metric-value">{{ order.get_payment_method_display }}</strong>
+                        </div>
+
+                        <div class="info-metric-col">
+                            <span class="metric-label">Payment Status</span>
+                            <strong class="metric-value">{{ order.get_payment_status_display }}</strong>
+                        </div>
+
+                        <div class="info-metric-col">
+                            <span class="metric-label">Total</span>
+                            <strong class="metric-value metric-total-price">₹{{ order.total_amount }}</strong>
+                        </div>
+
+                        <div class="info-action-col">
+                            <a href="{% url 'order_detail' order.id %}" class="btn-view-order">
+                                <span>View Order</span>
+                                <span aria-hidden="true">→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+
+            {% else %}
+
+            <!-- Empty Orders State -->
+            <div class="empty-orders-card">
+                <div class="empty-orders-icon-circle">
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                </div>
+                <h2>No Orders Yet</h2>
+                <p>You haven't placed any orders with TechNest yet. Browse our curated collection and place your first order today.</p>
+                <a href="{% url 'home' %}" class="empty-orders-cta-btn">
+                    <span>Start Shopping</span>
+                    <span aria-hidden="true">→</span>
+                </a>
+            </div>
+
+            {% endif %}
+
+        </div>
+    </main>
+
+</body>
+
+</html>

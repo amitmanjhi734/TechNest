@@ -1,0 +1,759 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | TechNest</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+
+    <!-- Razorpay Checkout -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+
+<body class="page-with-ambient-bg">
+
+    <!-- Unified Site Header -->
+    {% include "shop/includes/site_header.html" %}
+
+    <main class="checkout-page-modern">
+        <!-- Ambient Background Glow & Decorative Wave -->
+        <div class="ambient-glow glow-top-left" aria-hidden="true"></div>
+        <div class="ambient-glow glow-bottom-right" aria-hidden="true"></div>
+        <div class="ambient-wave" aria-hidden="true"></div>
+
+        <div class="checkout-container-modern animate-fade-in">
+
+            <!-- Subheader Back Link -->
+            <div class="checkout-back-wrapper">
+                <a href="{% url 'cart' %}" class="checkout-continue-link">
+                    <span aria-hidden="true">←</span> Continue Shopping
+                </a>
+            </div>
+
+            <!-- Page Title Row -->
+            <div class="checkout-page-title-row">
+                <div class="checkout-title-icon-box" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="checkout-page-h1">Checkout</h1>
+                    <p class="checkout-page-sub">Complete your order and get your tech delivered.</p>
+                </div>
+            </div>
+
+            <!-- Error Banner -->
+            {% if error %}
+            <div class="checkout-error-banner" role="alert">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <span>{{ error }}</span>
+            </div>
+            {% endif %}
+
+            <!-- Two-Column Checkout Layout -->
+            <div class="checkout-columns-layout">
+
+                <!-- LEFT COLUMN: ORDER SUMMARY -->
+                <section class="checkout-card-panel summary-panel">
+                    <div class="panel-header-with-icon">
+                        <div class="panel-icon-square blue" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                <line x1="8" y1="21" x2="16" y2="21"></line>
+                                <line x1="12" y1="17" x2="12" y2="21"></line>
+                            </svg>
+                        </div>
+                        <h2 class="panel-title">Order Summary</h2>
+                    </div>
+
+                    <!-- Items list -->
+                    <div class="checkout-items-list">
+                        {% for item in cart_items %}
+                        <div class="checkout-item-entry">
+                            <div class="checkout-thumb-box">
+                                {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                                {% else %}
+                                <div class="no-img-placeholder-sm">TechNest</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="checkout-item-details-box">
+                                <h3 class="checkout-item-product-name">{{ item.product.name }}</h3>
+                                <p class="checkout-item-qty-text">Quantity: {{ item.quantity }}</p>
+                                <p class="checkout-item-price-text">Price: ₹{{ item.get_total_price }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Coupon Section -->
+                    <div class="checkout-coupon-container">
+                        <div class="coupon-title-row">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                            </svg>
+                            <span class="coupon-header-title">Have a coupon?</span>
+                        </div>
+
+                        <div class="coupon-input-group">
+                            <input type="text" id="coupon-code" name="coupon_code" placeholder="Enter coupon code"
+                                autocomplete="off" value="{% if coupon %}{{ coupon.code }}{% endif %}">
+                            <button type="button" id="apply-coupon-btn" class="btn-apply-coupon">
+                                Apply
+                            </button>
+                            <button type="button" id="remove-coupon-btn" class="btn-remove-coupon" {% if not coupon %}style="display:none;"{% endif %}>
+                                Remove
+                            </button>
+                        </div>
+
+                        <div id="coupon-message" class="coupon-feedback-message {% if coupon %}success{% elif error and 'coupon' in error|lower %}error{% endif %}" role="status" aria-live="polite">
+                            {% if coupon %}
+                            Coupon {{ coupon.code }} applied successfully.
+                            {% elif error and 'coupon' in error|lower %}
+                            {{ error }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Price Calculations -->
+                    <div class="checkout-price-breakdown">
+                        <div class="price-breakdown-row">
+                            <span class="breakdown-label">Subtotal</span>
+                            <strong id="checkout-subtotal" class="breakdown-value">₹{{ subtotal }}</strong>
+                        </div>
+
+                        <div class="price-breakdown-row discount-row" id="coupon-discount-row" {% if not coupon_discount %}style="display: none;"{% endif %}>
+                            <span class="breakdown-label">Coupon Discount{% if coupon %} ({{ coupon.code }}){% endif %}</span>
+                            <strong id="checkout-discount" class="breakdown-value discount-text">-₹{{ coupon_discount }}</strong>
+                        </div>
+
+                        <!-- Highlighted Total Amount Pill -->
+                        <div class="checkout-total-highlight-pill">
+                            <span class="total-pill-label">Total Amount</span>
+                            <strong id="checkout-total" class="total-pill-value">₹{{ total }}</strong>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- RIGHT COLUMN: DELIVERY INFORMATION & PAYMENT METHOD -->
+                <section class="checkout-card-panel delivery-panel">
+                    <div class="panel-header-with-icon">
+                        <div class="panel-icon-square blue" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 21s7-6.2 7-12A7 7 0 0 0 5 9c0 5.8 7 12 7 12Z"></path>
+                                <circle cx="12" cy="9" r="2.2"></circle>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="panel-title">Delivery Information</h2>
+                            <p class="panel-subtitle">Choose a saved address or add a new one.</p>
+                        </div>
+                    </div>
+
+                    <form method="POST" id="checkout-form">
+                        {% csrf_token %}
+                        <input type="hidden" id="saved_address_id" name="saved_address_id" value="{{ selected_address_id }}">
+
+                        <!-- Saved Address Selection Cards Grid -->
+                        <div class="saved-address-grid-modern" id="saved-address-grid">
+                            {% if user.is_authenticated %}
+                            {% for saved in saved_addresses %}
+                            <button type="button"
+                                class="saved-address-card saved-address-card-modern{% if selected_address_id == saved.id|stringformat:'s' %} selected{% endif %}"
+                                data-address-id="{{ saved.id }}"
+                                data-full-name="{{ saved.full_name|escape }}"
+                                data-phone="{{ saved.phone|escape }}"
+                                data-address="{{ saved.address|escape }}"
+                                data-city="{{ saved.city|escape }}"
+                                data-pin-code="{{ saved.pin_code|escape }}">
+                                <span class="addr-card-icon" aria-hidden="true">
+                                    {% if saved.label == 'home' %}
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 10.5 12 3l9 7.5"></path>
+                                        <path d="M5.5 9.5V21h13V9.5"></path>
+                                        <path d="M9.5 21v-6h5v6"></path>
+                                    </svg>
+                                    {% elif saved.label == 'office' %}
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M4 21h16"></path>
+                                        <path d="M6 21V5h9v16"></path>
+                                        <path d="M15 9h3v12"></path>
+                                        <path d="M9 8h2M9 12h2M9 16h2"></path>
+                                    </svg>
+                                    {% else %}
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 21s7-6.2 7-12A7 7 0 0 0 5 9c0 5.8 7 12 7 12Z"></path>
+                                        <circle cx="12" cy="9" r="2"></circle>
+                                    </svg>
+                                    {% endif %}
+                                </span>
+                                <span class="addr-card-content">
+                                    <strong>{{ saved.get_label_display }}</strong>
+                                    <span>{{ saved.address|truncatechars:28 }}, {{ saved.city }}</span>
+                                </span>
+                                <span class="addr-card-radio-circle" aria-hidden="true"></span>
+                            </button>
+                            {% endfor %}
+                            {% endif %}
+
+                            <!-- Add New Address Card -->
+                            <button type="button"
+                                class="saved-address-card saved-address-card-modern new-address-card{% if selected_address_id == 'new' or not saved_addresses %} selected{% endif %}"
+                                data-address-id="new">
+                                <span class="addr-card-icon plus-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 5v14M5 12h14"></path>
+                                    </svg>
+                                </span>
+                                <span class="addr-card-content">
+                                    <strong>New Address</strong>
+                                    <span>Add a new delivery address</span>
+                                </span>
+                                <span class="addr-card-radio-circle" aria-hidden="true"></span>
+                            </button>
+                        </div>
+
+                        <!-- Address Mode Note -->
+                        <div class="address-mode-note-modern" id="address-mode-note">
+                            {% if selected_address_id != 'new' and saved_addresses %}
+                            Using your saved address. Select <strong>New Address</strong> to enter a different one.
+                            {% else %}
+                            Enter your delivery details below.
+                            {% endif %}
+                        </div>
+
+                        <!-- New Address Extra Options (Hidden when saved address is active) -->
+                        <div id="new-address-options" class="new-address-options" {% if selected_address_id != 'new' and saved_addresses %}style="display:none;"{% endif %}>
+                            <div class="checkout-field">
+                                <label for="address_label">Address Type</label>
+                                <select id="address_label" name="address_label" class="styled-select">
+                                    <option value="home">Home</option>
+                                    <option value="office">Office</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            {% if user.is_authenticated %}
+                            <label class="save-address-checkbox-label">
+                                <input type="checkbox" id="save_address" name="save_address" value="1">
+                                <span>Save this address for future orders</span>
+                            </label>
+
+                            <label class="save-address-checkbox-label secondary-save-option">
+                                <input type="checkbox" id="make_default" name="make_default" value="1">
+                                <span>Make this my default address</span>
+                            </label>
+                            {% endif %}
+                        </div>
+
+                        <!-- Input Fields with Icons -->
+                        <div class="checkout-inputs-list">
+                            <!-- Full Name -->
+                            <div class="modern-field-group">
+                                <label for="full_name">Full Name</label>
+                                <div class="modern-input-wrapper">
+                                    <span class="input-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="12" cy="7" r="4"></circle>
+                                        </svg>
+                                    </span>
+                                    <input type="text" id="full_name" name="full_name" placeholder="Enter your full name"
+                                        value="{{ customer_name }}" required>
+                                </div>
+                            </div>
+
+                            <!-- Phone Number -->
+                            <div class="modern-field-group">
+                                <label for="phone">Phone Number</label>
+                                <div class="modern-input-wrapper">
+                                    <span class="input-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                        </svg>
+                                    </span>
+                                    <input type="tel" id="phone" name="phone" placeholder="Enter your phone number"
+                                        value="{{ customer_phone }}" required>
+                                </div>
+                            </div>
+
+                            <!-- Complete Address -->
+                            <div class="modern-field-group">
+                                <label for="address">Complete Address</label>
+                                <div class="modern-input-wrapper textarea-wrapper">
+                                    <span class="input-icon textarea-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M12 21s7-6.2 7-12A7 7 0 0 0 5 9c0 5.8 7 12 7 12Z"></path>
+                                            <circle cx="12" cy="9" r="2.2"></circle>
+                                        </svg>
+                                    </span>
+                                    <textarea id="address" name="address" placeholder="House number, street, locality, landmark..."
+                                        rows="2" required>{{ customer_address }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- City & PIN Code Row -->
+                            <div class="fields-two-col-row">
+                                <div class="modern-field-group">
+                                    <label for="city">City</label>
+                                    <div class="modern-input-wrapper">
+                                        <span class="input-icon" aria-hidden="true">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M12 21s7-6.2 7-12A7 7 0 0 0 5 9c0 5.8 7 12 7 12Z"></path>
+                                                <circle cx="12" cy="9" r="2.2"></circle>
+                                            </svg>
+                                        </span>
+                                        <input type="text" id="city" name="city" placeholder="City"
+                                            value="{{ customer_city }}" required>
+                                    </div>
+                                </div>
+
+                                <div class="modern-field-group">
+                                    <label for="pin_code">PIN Code</label>
+                                    <div class="modern-input-wrapper">
+                                        <span class="input-icon" aria-hidden="true">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M3 10.5 12 3l9 7.5"></path>
+                                                <path d="M5.5 9.5V21h13V9.5"></path>
+                                            </svg>
+                                        </span>
+                                        <input type="text" id="pin_code" name="pin_code" placeholder="PIN code"
+                                            value="{{ customer_pin_code }}" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Method Section -->
+                        <div class="checkout-payment-section">
+                            <div class="panel-header-with-icon payment-subhead">
+                                <div class="panel-icon-square blue" aria-hidden="true">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                        <line x1="1" y1="10" x2="23" y2="10"></line>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="panel-title">Payment Method</h3>
+                                    <p class="panel-subtitle">Choose your preferred payment method.</p>
+                                </div>
+                            </div>
+
+                            <!-- Payment Method Cards -->
+                            <div class="payment-cards-group">
+                                <!-- Cash on Delivery -->
+                                <div class="payment-method-card-modern selected" data-payment="cod">
+                                    <div class="payment-method-icon-box" aria-hidden="true">
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                                            <circle cx="12" cy="12" r="2"></circle>
+                                            <path d="M6 12h.01M18 12h.01"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="payment-method-copy">
+                                        <strong>Cash on Delivery</strong>
+                                        <span>Pay when you receive your order.</span>
+                                    </div>
+                                    <div class="payment-card-radio-circle" aria-hidden="true"></div>
+                                </div>
+
+                                <!-- Online Payment (Razorpay) -->
+                                <div class="payment-method-card-modern" data-payment="online">
+                                    <div class="payment-method-icon-box" aria-hidden="true">
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                            <line x1="1" y1="10" x2="23" y2="10"></line>
+                                        </svg>
+                                    </div>
+                                    <div class="payment-method-copy">
+                                        <strong>Online Payment</strong>
+                                        <span>Pay securely using Razorpay UPI, Cards, Net Banking, etc.</span>
+                                    </div>
+                                    <div class="payment-card-radio-circle" aria-hidden="true"></div>
+                                </div>
+                            </div>
+
+                            <!-- Hidden select element for form POST compatibility -->
+                            <select id="payment_method" name="payment_method" style="display:none;" required>
+                                <option value="cod" selected>Cash on Delivery</option>
+                                <option value="online">Online Payment</option>
+                            </select>
+                        </div>
+
+                        <!-- Place Order Submit Button -->
+                        <button type="submit" class="btn-place-order-blue" id="place-order-btn">
+                            <span>Place Order</span>
+                            <span aria-hidden="true">→</span>
+                        </button>
+                    </form>
+                </section>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ==========================================
+         CHECKOUT & RAZORPAY SCRIPT
+    =========================================== -->
+    <script>
+
+        const checkoutForm = document.getElementById("checkout-form");
+        const placeOrderButton = document.getElementById("place-order-btn");
+        const paymentMethod = document.getElementById("payment_method");
+
+        const couponCodeInput = document.getElementById("coupon-code");
+        const applyCouponButton = document.getElementById("apply-coupon-btn");
+        const removeCouponButton = document.getElementById("remove-coupon-btn");
+        const couponMessage = document.getElementById("coupon-message");
+        const subtotalElement = document.getElementById("checkout-subtotal");
+        const discountElement = document.getElementById("checkout-discount");
+        const totalElement = document.getElementById("checkout-total");
+        const discountRow = document.getElementById("coupon-discount-row");
+
+        // Saved address selection
+        const addressCards = document.querySelectorAll(".saved-address-card");
+        const savedAddressId = document.getElementById("saved_address_id");
+        const addressModeNote = document.getElementById("address-mode-note");
+        const newAddressOptions = document.getElementById("new-address-options");
+        const fullNameInput = document.getElementById("full_name");
+        const phoneInput = document.getElementById("phone");
+        const addressInput = document.getElementById("address");
+        const cityInput = document.getElementById("city");
+        const pinInput = document.getElementById("pin_code");
+
+        function setAddressFieldsReadonly(readonly) {
+            [fullNameInput, phoneInput, addressInput, cityInput, pinInput].forEach(function (field) {
+                field.readOnly = readonly;
+                field.classList.toggle("readonly-address-field", readonly);
+            });
+        }
+
+        function selectAddressCard(card) {
+            addressCards.forEach(function (item) {
+                item.classList.remove("selected");
+            });
+            card.classList.add("selected");
+
+            const addressId = card.dataset.addressId;
+            savedAddressId.value = addressId;
+
+            if (addressId === "new") {
+                setAddressFieldsReadonly(false);
+                newAddressOptions.style.display = "block";
+                addressModeNote.innerHTML = "Enter your delivery details below.";
+
+                fullNameInput.value = "";
+                phoneInput.value = "";
+                addressInput.value = "";
+                cityInput.value = "";
+                pinInput.value = "";
+
+                if (document.getElementById("save_address")) {
+                    document.getElementById("save_address").checked = false;
+                    document.getElementById("make_default").checked = false;
+                }
+                return;
+            }
+
+            setAddressFieldsReadonly(true);
+            newAddressOptions.style.display = "none";
+            addressModeNote.innerHTML = "Using your saved address. Select <strong>New Address</strong> to enter a different one.";
+
+            fullNameInput.value = card.dataset.fullName || "";
+            phoneInput.value = card.dataset.phone || "";
+            addressInput.value = card.dataset.address || "";
+            cityInput.value = card.dataset.city || "";
+            pinInput.value = card.dataset.pinCode || "";
+        }
+
+        addressCards.forEach(function (card) {
+            card.addEventListener("click", function () {
+                selectAddressCard(card);
+            });
+        });
+
+        // Apply the server-selected address on first load.
+        const initialAddressCard = Array.from(addressCards).find(function (card) {
+            return card.dataset.addressId === savedAddressId.value;
+        });
+
+        if (initialAddressCard) {
+            if (initialAddressCard.dataset.addressId === "new") {
+                setAddressFieldsReadonly(false);
+            } else {
+                setAddressFieldsReadonly(true);
+            }
+        }
+
+        // Payment method card selection
+        const paymentCards = document.querySelectorAll(".payment-method-card-modern");
+
+        paymentCards.forEach(function (card) {
+            card.addEventListener("click", function () {
+                paymentMethod.value = card.dataset.payment;
+
+                paymentCards.forEach(function (item) {
+                    item.classList.remove("selected");
+                });
+
+                card.classList.add("selected");
+            });
+        });
+
+        function setCouponMessage(message, type) {
+            couponMessage.textContent = message || "";
+            couponMessage.classList.remove("success", "error");
+            if (type) {
+                couponMessage.classList.add(type);
+            }
+        }
+
+        function setCouponAppliedState(applied) {
+            removeCouponButton.style.display = applied ? "inline-flex" : "none";
+            applyCouponButton.style.display = applied ? "none" : "inline-flex";
+            couponCodeInput.readOnly = applied;
+        }
+
+        // Apply coupon independently of the selected payment method.
+        applyCouponButton.addEventListener("click", async function () {
+            const code = couponCodeInput.value.trim();
+
+            if (!code) {
+                setCouponMessage("Please enter a coupon code.", "error");
+                return;
+            }
+
+            applyCouponButton.disabled = true;
+            applyCouponButton.innerText = "Applying...";
+            setCouponMessage("", null);
+
+            const formData = new FormData();
+            formData.append("code", code);
+
+            const csrfToken = document.querySelector(
+                "[name=csrfmiddlewaretoken]"
+            ).value;
+
+            try {
+                const response = await fetch(
+                    "{% url 'apply_coupon' %}",
+                    {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "X-CSRFToken": csrfToken,
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!data.success) {
+                    setCouponMessage(data.error, "error");
+                    return;
+                }
+
+                couponCodeInput.value = data.code;
+                setCouponMessage(data.message, "success");
+
+                subtotalElement.textContent = "₹" + data.subtotal;
+                discountElement.textContent = "-₹" + data.discount;
+                totalElement.textContent = "₹" + data.total;
+                discountRow.style.display = "flex";
+                setCouponAppliedState(true);
+
+            } catch (error) {
+                console.error(error);
+                setCouponMessage(
+                    "Something went wrong while applying the coupon.",
+                    "error"
+                );
+            } finally {
+                applyCouponButton.disabled = false;
+                applyCouponButton.innerText = "Apply";
+            }
+        });
+
+        // Remove the currently applied coupon without changing cart/address/payment logic.
+        removeCouponButton.addEventListener("click", async function () {
+            removeCouponButton.disabled = true;
+            removeCouponButton.innerText = "Removing...";
+
+            const csrfToken = document.querySelector(
+                "[name=csrfmiddlewaretoken]"
+            ).value;
+
+            try {
+                const response = await fetch(
+                    "{% url 'remove_coupon' %}",
+                    {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": csrfToken,
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!data.success) {
+                    setCouponMessage(data.error || "Unable to remove coupon.", "error");
+                    return;
+                }
+
+                couponCodeInput.value = "";
+                couponCodeInput.readOnly = false;
+                subtotalElement.textContent = "₹" + data.subtotal;
+                discountElement.textContent = "-₹0";
+                totalElement.textContent = "₹" + data.total;
+                discountRow.style.display = "none";
+                setCouponAppliedState(false);
+                setCouponMessage(data.message, "success");
+            } catch (error) {
+                console.error(error);
+                setCouponMessage("Something went wrong while removing the coupon.", "error");
+            } finally {
+                removeCouponButton.disabled = false;
+                removeCouponButton.innerText = "Remove";
+            }
+        });
+
+        // Keep the initial UI state synchronized with the server-rendered checkout.
+        setCouponAppliedState({% if coupon %}true{% else %}false{% endif %});
+
+        checkoutForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            // =========================
+            // CASH ON DELIVERY
+            // =========================
+            if (paymentMethod.value === "cod") {
+                checkoutForm.submit();
+                return;
+            }
+
+            // =========================
+            // ONLINE PAYMENT
+            // =========================
+            if (paymentMethod.value === "online") {
+                placeOrderButton.disabled = true;
+                placeOrderButton.innerText = "Opening Payment...";
+
+                const formData = new FormData(checkoutForm);
+
+                fetch("{% url 'create_razorpay_order' %}", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            alert(data.error);
+                            placeOrderButton.disabled = false;
+                            placeOrderButton.innerText = "Place Order";
+                            return;
+                        }
+
+                        const options = {
+                            key: data.razorpay_key_id,
+                            amount: data.razorpay_amount,
+                            currency: "INR",
+                            name: "TechNest",
+                            description: "TechNest Order #" + data.order_id,
+                            order_id: data.razorpay_order_id,
+
+                            prefill: {
+                                name: data.customer_name,
+                                contact: data.customer_phone
+                            },
+
+                            theme: {
+                                color: "#111827"
+                            },
+
+                            handler: function (response) {
+                                const form = document.createElement("form");
+                                form.method = "POST";
+                                form.action = "{% url 'payment_verify' %}";
+
+                                const csrfToken = document.querySelector(
+                                    "[name=csrfmiddlewaretoken]"
+                                ).value;
+
+                                const csrfInput = document.createElement("input");
+                                csrfInput.type = "hidden";
+                                csrfInput.name = "csrfmiddlewaretoken";
+                                csrfInput.value = csrfToken;
+                                form.appendChild(csrfInput);
+
+                                const fields = {
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature
+                                };
+
+                                Object.entries(fields).forEach(([name, value]) => {
+                                    const input = document.createElement("input");
+                                    input.type = "hidden";
+                                    input.name = name;
+                                    input.value = value;
+                                    form.appendChild(input);
+                                });
+
+                                document.body.appendChild(form);
+                                form.submit();
+                            },
+
+                            modal: {
+                                ondismiss: function () {
+                                    placeOrderButton.disabled = false;
+                                    placeOrderButton.innerText = "Place Order";
+                                }
+                            }
+                        };
+
+                        const razorpay = new Razorpay(options);
+                        razorpay.open();
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        alert("Something went wrong while opening payment.");
+                        placeOrderButton.disabled = false;
+                        placeOrderButton.innerText = "Place Order";
+                    });
+            }
+        });
+
+    </script>
+
+
+</body>
+
+</html>

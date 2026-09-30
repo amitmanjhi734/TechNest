@@ -1,0 +1,248 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Addresses - TechNest</title>
+    <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+</head>
+
+<body class="account-page">
+
+
+    {% load static %}
+
+    <header class="account-topbar">
+        <div class="account-topbar-inner">
+
+            <a href="{% url 'home' %}" class="account-brand" aria-label="TechNest home">
+                <img src="{% static 'shop/images/technest-logo.svg' %}" alt="TechNest" class="account-brand-logo">
+            </a>
+
+            <a href="{% url 'home' %}" class="account-back-link">
+                <span aria-hidden="true">←</span> Continue Shopping
+            </a>
+
+        </div>
+    </header>
+
+    <main class="saved-address-page">
+        <div class="saved-address-container">
+
+            <div class="account-page-heading">
+                <div class="account-heading-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+                        <circle cx="12" cy="10" r="2.5"></circle>
+                    </svg>
+                </div>
+                <div>
+                    <span class="account-eyebrow">ACCOUNT</span>
+                    <h1>Saved Addresses</h1>
+                    <p>Manage your delivery addresses and make checkout faster.</p>
+                </div>
+            </div>
+
+            {% if messages %}
+            <div class="account-messages">
+                {% for message in messages %}
+                <div class="account-message {% if message.tags %}{{ message.tags }}{% endif %}">
+                    <span class="account-message-icon">✓</span>
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="saved-address-layout">
+
+                <section class="saved-address-list-card">
+                    <div class="saved-address-list-header">
+                        <div>
+                            <h2>Your addresses</h2>
+                            <p>{% if saved_addresses %}{{ saved_addresses|length }} saved address{{
+                                saved_addresses|length|pluralize }}{% else %}No saved addresses yet{% endif %}</p>
+                        </div>
+                        <span class="address-count-badge">{{ saved_addresses|length }}</span>
+                    </div>
+
+                    {% if saved_addresses %}
+                    <div class="saved-addresses-stack">
+                        {% for address in saved_addresses %}
+                        <article class="account-address-card {% if address.is_default %}is-default{% endif %}">
+                            <div class="account-address-card-top">
+                                <div class="account-address-label-wrap">
+                                    <span
+                                        class="account-address-icon {% if address.label == 'office' %}office{% elif address.label == 'other' %}other{% endif %}">
+                                        {% if address.label == 'office' %}
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M3 21h18"></path>
+                                            <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
+                                            <path d="M9 7h1"></path>
+                                            <path d="M14 7h1"></path>
+                                            <path d="M9 11h1"></path>
+                                            <path d="M14 11h1"></path>
+                                            <path d="M10 21v-4h4v4"></path>
+                                        </svg>
+                                        {% elif address.label == 'other' %}
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+                                            <circle cx="12" cy="10" r="2.5"></circle>
+                                        </svg>
+                                        {% else %}
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="m3 10 9-7 9 7"></path>
+                                            <path d="M5 9v11h14V9"></path>
+                                            <path d="M9 20v-6h6v6"></path>
+                                        </svg>
+                                        {% endif %}
+                                    </span>
+                                    <div>
+                                        <div class="account-address-title-row">
+                                            <h3>{{ address.get_label_display }}</h3>
+                                            {% if address.is_default %}<span
+                                                class="default-address-badge">DEFAULT</span>{% endif %}
+                                        </div>
+                                        <span class="account-address-updated">Saved {{ address.updated_at|date:"M d, Y"
+                                            }}</span>
+                                    </div>
+                                </div>
+
+                                <form method="post" action="{% url 'saved_addresses' %}" class="delete-address-form"
+                                    onsubmit="return confirm('Remove this saved address?');">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="address_id" value="{{ address.id }}">
+                                    <button type="submit" class="delete-address-btn" title="Remove address"
+                                        aria-label="Remove {{ address.get_label_display }} address">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                                            <path d="M10 11v6"></path>
+                                            <path d="M14 11v6"></path>
+                                            <path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                        Remove
+                                    </button>
+                                </form>
+                            </div>
+
+                            <div class="account-address-details">
+                                <strong>{{ address.full_name }}</strong>
+                                <span>{{ address.phone }}</span>
+                                <p>{{ address.address }}</p>
+                                <p>{{ address.city }} <span class="address-separator">•</span> {{ address.pin_code }}
+                                </p>
+                            </div>
+                        </article>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-address-state">
+                        <div class="empty-address-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+                                <circle cx="12" cy="10" r="2.5"></circle>
+                            </svg>
+                        </div>
+                        <h3>No saved addresses</h3>
+                        <p>Add your home, office, or another delivery address. It will appear here and can be selected
+                            during checkout.</p>
+                    </div>
+                    {% endif %}
+                </section>
+
+                <aside class="add-address-card">
+                    <div class="add-address-heading">
+                        <div class="add-address-heading-icon">+</div>
+                        <div>
+                            <h2>Add new address</h2>
+                            <p>Save an address for faster checkout.</p>
+                        </div>
+                    </div>
+
+                    <form method="post" class="saved-address-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add">
+
+                        <div class="saved-form-field">
+                            <label for="address_label">Address type</label>
+                            <select id="address_label" name="address_label">
+                                <option value="home">Home</option>
+                                <option value="office">Office</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="saved-form-field">
+                            <label for="saved_full_name">Full name</label>
+                            <input id="saved_full_name" name="full_name" type="text" placeholder="Enter your full name"
+                                autocomplete="name" required>
+                        </div>
+
+                        <div class="saved-form-field">
+                            <label for="saved_phone">Phone number</label>
+                            <input id="saved_phone" name="phone" type="tel" placeholder="Enter your phone number"
+                                autocomplete="tel" required>
+                        </div>
+
+                        <div class="saved-form-field">
+                            <label for="saved_address">Complete address</label>
+                            <textarea id="saved_address" name="address" rows="3"
+                                placeholder="House number, street, locality, landmark..." autocomplete="street-address"
+                                required></textarea>
+                        </div>
+
+                        <div class="saved-form-two-col">
+                            <div class="saved-form-field">
+                                <label for="saved_city">City</label>
+                                <input id="saved_city" name="city" type="text" placeholder="Enter city"
+                                    autocomplete="address-level2" required>
+                            </div>
+                            <div class="saved-form-field">
+                                <label for="saved_pin_code">PIN code</label>
+                                <input id="saved_pin_code" name="pin_code" type="text" inputmode="numeric"
+                                    maxlength="10" placeholder="Enter PIN code" autocomplete="postal-code" required>
+                            </div>
+                        </div>
+
+                        <label class="default-address-checkbox">
+                            <input type="checkbox" name="make_default" value="1">
+                            <span>
+                                <strong>Make this my default address</strong>
+                                <small>Use this address automatically at checkout.</small>
+                            </span>
+                        </label>
+
+                        <button type="submit" class="save-address-page-btn">
+                            <span>Save Address</span>
+                            <span aria-hidden="true">→</span>
+                        </button>
+                    </form>
+                </aside>
+
+            </div>
+
+            <div class="saved-address-footer-note">
+                <span class="saved-note-icon">✓</span>
+                <div>
+                    <strong>Your addresses are private</strong>
+                    <span>Saved addresses are linked to your TechNest account and are only available to you when you are
+                        signed in.</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+
+</html>
